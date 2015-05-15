@@ -8,7 +8,7 @@ repository = "https://github.com/vtduncan/rust-atom"
 documentation = "https://vtduncan.github.io/rust-atom/atom/index.html"
 description = "Library for serializing the Atom web content syndication format"
 keywords = ["rss", "atom", "feed", "blog", "web", "news"]
-exclude = ["test-data/"]
+exclude = ["test-data/*"]
 
 
 [dependencies]
