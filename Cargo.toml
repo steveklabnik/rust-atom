@@ -1,13 +1,13 @@
 [package]
 
-name = "rss"
+name = "atom_syndication"
 version = "0.1.0"
-authors = ["Corey Farwell <coreyf@rwell.org>"]
+authors = ["Duncan <duncan@vtllf.org>", "Corey Farwell <coreyf@rwell.org>"]
 license = "Apache-2.0"
-repository = "https://github.com/frewsxcv/rust-rss"
-documentation = "https://frewsxcv.github.io/rust-rss/rss/index.html"
-description = "Library for serializing the RSS web content syndication format"
-keywords = ["rss", "feed", "blog", "web", "news"]
+repository = "https://github.com/vtduncan/rust-atom"
+documentation = "https://vtduncan.github.io/rust-atom/atom/index.html"
+description = "Library for serializing the Atom web content syndication format"
+keywords = ["rss", "atom", "feed", "blog", "web", "news"]
 exclude = ["test-data/"]
 
 

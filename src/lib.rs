@@ -12,80 +12,88 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Library for serializing the RSS web content syndication format
+//! Library for serializing the Atom web content syndication format
 //!
 //! # Examples
 //!
 //! ## Writing
 //!
 //! ```
-//! use rss::{Channel, Item, Rss};
+//! use atom_syndication::{Feed, Entry};
 //!
-//! let item = Item {
-//!     title: Some(String::from("Ford hires Elon Musk as CEO")),
-//!     pub_date: Some(String::from("01 Apr 2019 07:30:00 GMT")),
-//!     description: Some(String::from("In an unprecedented move, Ford hires Elon Musk.")),
+//! let entry = Entry {
+//!     id: String::from("urn:uuid:4ae8550b-2987-49fa-9f8c-54c180c418ac"),
+//!     title: String::from("Ford hires Elon Musk as CEO"),
+//!     updated: String::from("2019-04-01T07:30:00Z"),
 //!     ..Default::default()
 //! };
 //!
-//! let channel = Channel {
+//! let feed = Feed {
+//!     id: String::from("urn:uuid:b3420f84-6bdf-4f46-a225-f1b9a14703b6"),
 //!     title: String::from("TechCrunch"),
-//!     link: String::from("http://techcrunch.com"),
-//!     description: String::from("The latest technology news and information on startups"),
-//!     items: vec![item],
+//!     updated: String::from("2019-04-01T07:30:00Z"),
+//!     entries: vec![entry],
 //!     ..Default::default()
 //! };
 //!
-//! let rss = Rss(channel);
-//!
-//! let rss_string = rss.to_string();
+//! let atom_string = feed.to_string();
 //! ```
 //!
 //! ## Reading
 //!
 //! ```
-//! use rss::Rss;
+//! use atom_syndication::Feed;
 //!
-//! let rss_str = r#"
-//! <?xml version="1.0" encoding="UTF-8"?>
-//! <rss version="2.0">
-//!   <channel>
-//!     <title>TechCrunch</title>
-//!     <link>http://techcrunch.com</link>
-//!     <description>The latest technology news and information on startups</description>
-//!     <item>
-//!       <title>Ford hires Elon Musk as CEO</title>
-//!       <pubDate>01 Apr 2019 07:30:00 GMT</pubDate>
-//!       <description>In an unprecedented move, Ford hires Elon Musk.</description>
-//!     </item>
-//!   </channel>
-//! </rss>
+//! let atom_str = r#"
+//! <?xml version="1.0" encoding="utf-8"?>
+//! <feed xmlns="http://www.w3.org/2005/Atom">
+//!   <id>urn:uuid:b3420f84-6bdf-4f46-a225-f1b9a14703b6</id>
+//!   <title>TechCrunch</title>
+//!   <updated>2019-04-01T07:30:00Z</updated>
+//!   <entry>
+//!     <id>urn:uuid:4ae8550b-2987-49fa-9f8c-54c180c418ac</id>
+//!     <title>Ford hires Elon Musk as CEO</title>
+//!     <updated>2019-04-01T07:30:00Z</updated>
+//!   </entry>
+//! </feed>
 //! "#;
 //!
-//! let rss = rss_str.parse::<Rss>().unwrap();
+//! let feed = atom_str.parse::<Feed>().unwrap();
 //! ```
 
+mod feed;
+mod entry;
+mod link;
+mod source;
 mod category;
-mod channel;
-mod item;
-mod text_input;
+mod generator;
+mod person;
+mod author;
+mod contributor;
 
 extern crate xml;
 
-use std::ascii::AsciiExt;
-use std::str::FromStr;
+use xml::Element;
 
-use xml::{Element, ElementBuilder, Parser, Xml};
-
+pub use ::feed::Feed;
+pub use ::entry::Entry;
+pub use ::link::Link;
+pub use ::source::Source;
 pub use ::category::Category;
-pub use ::channel::Channel;
-pub use ::item::Item;
-pub use ::text_input::TextInput;
+pub use ::generator::Generator;
+pub use ::person::Person;
+pub use ::author::Author;
+pub use ::contributor::Contributor;
+
+
+const NS: &'static str = "http://www.w3.org/2005/Atom";
 
 
 trait ElementUtils {
     fn tag_with_text(&mut self, child_name: &'static str, child_body: &str);
     fn tag_with_optional_text(&mut self, child_name: &'static str, child_body: &Option<String>);
+    fn attribute_with_text(&mut self, attribute_name: &'static str, attribute_value: &str);
+    fn attribute_with_optional_text(&mut self, attribute_name: &'static str, attribute_value: &Option<String>);
 }
 
 
@@ -99,11 +107,21 @@ impl ElementUtils for Element {
             self.tag_with_text(child_name, &c);
         }
     }
+
+    fn attribute_with_text(&mut self, attribute_name: &'static str, attribute_value: &str) {
+        self.set_attribute(attribute_name.to_string(), None, attribute_value.to_string());
+    }
+
+    fn attribute_with_optional_text(&mut self, attribute_name: &'static str, attribute_value: &Option<String>) {
+        if let Some(ref v) = *attribute_value {
+            self.attribute_with_text(attribute_name, &v);
+        }
+    }
 }
 
 
 fn elem_with_text(tag_name: &'static str, chars: &str) -> Element {
-    let mut elem = Element::new(tag_name.to_string(), None, vec![]);
+    let mut elem = Element::new(tag_name.to_string(), Some(NS.to_string()), vec![]);
     elem.text(chars.to_string());
     elem
 }
@@ -115,166 +133,125 @@ trait ViaXml {
 }
 
 
-/// [RSS 2.0 Specification § What is RSS]
-/// (http://cyber.law.harvard.edu/rss/rss.html#whatIsRss)
-#[derive(Default)]
-pub struct Rss(pub Channel);
-
-impl ViaXml for Rss {
-    fn to_xml(&self) -> Element {
-        let mut rss = Element::new("rss".to_string(), None, vec![("version".to_string(), None, "2.0".to_string())]);
-
-        let &Rss(ref channel) = self;
-        rss.tag(channel.to_xml());
-
-        rss
-    }
-
-    fn from_xml(rss_elem: Element) -> Result<Self, &'static str> {
-        if rss_elem.name.to_ascii_lowercase() != "rss" {
-            panic!("Expected <rss>, found <{}>", rss_elem.name);
-        }
-
-        let channel_elem = match rss_elem.get_child("channel", None) {
-            Some(elem) => elem,
-            None => return Err("No <channel> element found in <rss>"),
-        };
-
-        let channel = try!(ViaXml::from_xml(channel_elem.clone()));
-
-        Ok(Rss(channel))
-    }
-}
-
-impl FromStr for Rss {
-    type Err = &'static str;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut parser = Parser::new();
-        parser.feed_str(&s);
-
-        let mut builder = ElementBuilder::new();
-
-        for event in parser {
-            if let Some(Ok(elem)) = builder.handle_event(event) {
-                return ViaXml::from_xml(elem);
-            }
-        }
-
-        Err("RSS read error")
-    }
-}
-
-impl ToString for Rss {
-    fn to_string(&self) -> String {
-        let mut ret = format!("{}", Xml::PINode("xml version='1.0' encoding='UTF-8'".to_string()));
-        ret.push_str(&format!("{}", self.to_xml()));
-        ret
-    }
-}
-
-
 #[cfg(test)]
 mod test {
     use std::default::Default;
     use std::fs::File;
     use std::io::Read;
     use std::str::FromStr;
-    use super::{Rss, Item, Channel};
+    use super::{Person, Entry, Feed, Link};
 
     #[test]
     fn test_basic_to_string() {
-        let item = Item {
-            title: Some("My first post!".to_string()),
-            link: Some("http://myblog.com/post1".to_string()),
-            description: Some("This is my first post".to_string()),
+        let author = Person {
+            name: "N. Blogger".to_string(),
             ..Default::default()
         };
 
-        let channel = Channel {
+        let entry = Entry {
+            title: "My first post!".to_string(),
+            content: Some("This is my first post".to_string()),
+            ..Default::default()
+        };
+
+        let feed = Feed {
             title: "My Blog".to_string(),
-            link: "http://myblog.com".to_string(),
-            description: "Where I write stuff".to_string(),
-            items: vec![item],
+            authors: vec![author],
+            entries: vec![entry],
             ..Default::default()
         };
 
-        let rss = Rss(channel);
-        assert_eq!(rss.to_string(), "<?xml version=\'1.0\' encoding=\'UTF-8\'?><rss version=\'2.0\'><channel><title>My Blog</title><link>http://myblog.com</link><description>Where I write stuff</description><item><title>My first post!</title><link>http://myblog.com/post1</link><description>This is my first post</description></item></channel></rss>");
+        assert_eq!(feed.to_string(), "<?xml version=\"1.0\" encoding=\"utf-8\"?><feed xmlns=\'http://www.w3.org/2005/Atom\'><id></id><title>My Blog</title><updated></updated><author><name>N. Blogger</name></author><entry><id></id><title>My first post!</title><updated></updated><content>This is my first post</content></entry></feed>");
+    }
+
+    #[test]
+    fn test_links() {
+        let feed = Feed {
+            links: vec![
+                Link {
+                    href: "http://test.blog/blog.atom".to_string(),
+                    rel: Some("self".to_string()),
+                    ..Default::default()
+                },
+            ],
+            entries: vec![
+                Entry {
+                    links: vec![
+                        Link {
+                            href: "http://test.blog/entry".to_string(),
+                            rel: Some("alternate".to_string()),
+                            ..Default::default()
+                        }
+                    ],
+                    source: Some(Feed {
+                        title: "Original Blog".to_string(),
+                        links: vec![
+                            Link {
+                                href: "http://original.blog/feed.atom".to_string(),
+                                rel: Some("self".to_string()),
+                                ..Default::default()
+                            }
+                        ],
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                },
+            ],
+            ..Default::default()
+        };
+
+        assert!(feed.to_string().bytes().count() > 0);
     }
 
     #[test]
     fn test_from_file() {
-        let mut file = File::open("test-data/pinboard.xml").unwrap();
-        let mut rss_string = String::new();
-        file.read_to_string(&mut rss_string).unwrap();
-        let rss = Rss::from_str(&rss_string).unwrap();
-        assert!(rss.to_string().len() > 0);
+        let mut file = File::open("test-data/xkcd.xml").unwrap();
+        let mut atom_string = String::new();
+        file.read_to_string(&mut atom_string).unwrap();
+        let feed = Feed::from_str(&atom_string).unwrap();
+        assert!(feed.to_string().len() > 0);
     }
 
     #[test]
-    fn test_read_no_channels() {
-        let rss_str = "<rss></rss>";
-        assert!(Rss::from_str(rss_str).is_err());
+    fn test_read_no_feeds() {
+        let atom_str = "";
+        assert!(Feed::from_str(atom_str).is_err());
     }
 
     #[test]
-    fn test_read_one_channel_no_properties() {
-        let rss_str = "\
-            <rss>\
-                <channel>\
-                </channel>\
-            </rss>";
-        assert!(Rss::from_str(rss_str).is_err());
+    fn test_read_one_feed_no_properties() {
+        let atom_str = "\
+            <feed>\
+            </feed>";
+        assert!(Feed::from_str(atom_str).is_err());
     }
 
     #[test]
-    fn test_read_one_channel() {
-        let rss_str = "\
-            <rss>\
-                <channel>\
-                    <title>Hello world!</title>\
-                    <description></description>\
-                    <link></link>\
-                </channel>\
-            </rss>";
-        let Rss(channel) = Rss::from_str(rss_str).unwrap();
-        assert_eq!("Hello world!", channel.title);
+    fn test_read_one_feed() {
+        let atom_str = r#"
+            <feed xmlns="http://www.w3.org/2005/Atom">
+                <id></id>
+                <title>Hello world!</title>
+                <updated></updated>
+                <description></description>
+            </feed>"#;
+        println!("{}", atom_str);
+        let feed = Feed::from_str(atom_str).unwrap();
+        assert_eq!("Hello world!", feed.title);
     }
 
-    #[test]
-    fn test_read_text_input() {
-        let rss_str = "\
-            <rss>\
-                <channel>\
-                    <title></title>\
-                    <description></description>\
-                    <link></link>\
-                    <textInput>\
-                        <title>Foobar</title>\
-                        <description></description>\
-                        <name></name>\
-                        <link></link>\
-                    </textInput>\
-                </channel>\
-            </rss>";
-        let Rss(channel) = Rss::from_str(rss_str).unwrap();
-        assert_eq!("Foobar", channel.text_input.unwrap().title);
-    }
-
-    // Ensure reader ignores the PI XML node and continues to parse the RSS
+    // Ensure reader ignores the PI XML node and continues to parse the feed
     #[test]
     fn test_read_with_pinode() {
-        let rss_str = "\
-            <?xml version=\'1.0\' encoding=\'UTF-8\'?>\
-            <rss>\
-                <channel>\
-                    <title>Title</title>\
-                    <link></link>\
-                    <description></description>\
-                </channel>\
-            </rss>";
-        let Rss(channel) = Rss::from_str(rss_str).unwrap();
-        assert_eq!("Title", channel.title);
+        let atom_str = r#"
+            <?xml version="1.0" encoding="UTF-8"?>
+            <feed xmlns="http://www.w3.org/2005/Atom">
+                <id></id>
+                <title>Title</title>
+                <updated></updated>
+                <description></description>
+            </feed>"#;
+        let feed = Feed::from_str(atom_str).unwrap();
+        assert_eq!("Title", feed.title);
     }
 }

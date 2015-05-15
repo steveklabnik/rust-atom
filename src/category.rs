@@ -1,33 +1,43 @@
 use xml::Element;
 
-use ::ViaXml;
+use ::{NS, ElementUtils, ViaXml};
 
 
-/// [RSS 2.0 Specification § `<category>` sub-element of `<item>`]
-/// (http://cyber.law.harvard.edu/rss/rss.html#ltcategorygtSubelementOfLtitemgt)
+/// [The Atom Syndication Format § The "atom:category" Element]
+/// (https://tools.ietf.org/html/rfc4287#section-4.2.2)
 #[derive(Default)]
 pub struct Category {
-    pub domain: Option<String>,
-    pub value: String,
+    pub term: String,
+    pub scheme: Option<String>,
+    pub label: Option<String>,
 }
+
 
 impl ViaXml for Category {
     fn to_xml(&self) -> Element {
-        let mut category = match self.domain {
-            Some(ref d) => Element::new("category".to_string(), None, vec![("domain".to_string(), None, d.clone())]),
-            None => Element::new("category".to_string(), None, vec![]),
-        };
-        category.text(self.value.clone());
-        category
+        let mut link = Element::new("category".to_string(), Some(NS.to_string()), vec![]);
+
+        link.attribute_with_text("term", &self.term);
+
+        link.attribute_with_optional_text("scheme", &self.scheme);
+        link.attribute_with_optional_text("label", &self.label);
+
+        link
     }
 
     fn from_xml(elem: Element) -> Result<Self, &'static str> {
-        let domain = elem.get_attribute("domain", None).map(|s| s.to_string());
-        let value = elem.content_str();
+        let term = match elem.get_attribute("term", None) {
+            Some(attr) => attr.to_string(),
+            None => return Err(r#"<link> is missing required "term" element"#),
+        };
+
+        let scheme = elem.get_attribute("scheme", None).map(String::from);
+        let label = elem.get_attribute("label", None).map(String::from);
 
         Ok(Category {
-            domain: domain,
-            value: value,
+            term: term,
+            scheme: scheme,
+            label: label,
         })
     }
 }

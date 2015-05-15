@@ -1,59 +1,54 @@
-# rust-rss
+# rust-atom
 
-[![Build Status](https://travis-ci.org/frewsxcv/rust-rss.svg?branch=master)](https://travis-ci.org/frewsxcv/rust-rss)
-[![rss on Crates.io](https://meritbadge.herokuapp.com/rss)](https://crates.io/crates/rss)
+[![atom_syndication on Crates.io](https://meritbadge.herokuapp.com/atom_syndication)](https://crates.io/crates/atom_syndication)
 
-[Documentation](https://frewsxcv.github.io/rust-rss/)
+[Documentation](https://vtduncan.github.io/rust-atom/)
 
-Library for serializing the RSS web content syndication format
+Library for serializing the Atom web content syndication format
 
 ## Examples
 
 ### Writing
 
 ```rust
-use rss::{Channel, Item, Rss};
+use atom::{Feed, Entry};
 
-let item = Item {
-    title: Some(String::from("Ford hires Elon Musk as CEO")),
-    pub_date: Some(String::from("01 Apr 2019 07:30:00 GMT")),
-    description: Some(String::from("In an unprecedented move, Ford hires Elon Musk.")),
+let entry = Entry {
+    id: String::from("urn:uuid:4ae8550b-2987-49fa-9f8c-54c180c418ac"),
+    title: String::from("Ford hires Elon Musk as CEO"),
+    updated: String::from("2019-04-01T07:30:00Z"),
     ..Default::default()
 };
 
-let channel = Channel {
+let feed = Feed {
+    id: String::from("urn:uuid:b3420f84-6bdf-4f46-a225-f1b9a14703b6"),
     title: String::from("TechCrunch"),
-    link: String::from("http://techcrunch.com"),
-    description: String::from("The latest technology news and information on startups"),
-    items: vec![item],
+    updated: String::from("2019-04-01T07:30:00Z"),
+    entries: vec![entry],
     ..Default::default()
 };
 
-let rss = Rss(channel);
-
-let rss_string = rss.to_string();
+let atom_string = feed.to_string();
 ```
 
 ### Reading
 
 ```rust
-use rss::Rss;
+use atom::Feed;
 
-let rss_str = r#"
-<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-  <channel>
-    <title>TechCrunch</title>
-    <link>http://techcrunch.com</link>
-    <description>The latest technology news and information on startups</description>
-    <item>
-      <title>Ford hires Elon Musk as CEO</title>
-      <pubDate>01 Apr 2019 07:30:00 GMT</pubDate>
-      <description>In an unprecedented move, Ford hires Elon Musk.</description>
-    </item>
-  </channel>
-</rss>
+let atom_str = r#"
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>urn:uuid:b3420f84-6bdf-4f46-a225-f1b9a14703b6</id>
+  <title>TechCrunch</title>
+  <updated>2019-04-01T07:30:00Z</updated>
+  <entry>
+    <id>urn:uuid:4ae8550b-2987-49fa-9f8c-54c180c418ac</id>
+    <title>Ford hires Elon Musk as CEO</title>
+    <updated>2019-04-01T07:30:00Z</updated>
+  </entry>
+</feed>
 "#;
 
-let rss = rss_str.parse::<Rss>().unwrap();
+let feed = atom_str.parse::<Feed>().unwrap();
 ```
