@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Entry","RSS 2.0 Specification § Elements of `<item>`"],["Feed","RSS 2.0 Specification § Required channel elements"]]});
