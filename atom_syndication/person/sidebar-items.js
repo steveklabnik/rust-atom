@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Person","The Atom Syndication Format § Person Constructs"]]});

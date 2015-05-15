@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `atom_syndication` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, atom_syndication">
+
+    <title>atom_syndication - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'atom_syndication', ty: 'mod', relpath: '../'};</script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>atom_syndication</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
+        </span><a id='src-0' class='srclink' href='../src/atom_syndication/lib.rs.html#15-257' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>Library for serializing the Atom web content syndication format</p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1>
+<h2 id="writing" class='section-header'><a
+                           href="#writing">Writing</a></h2><pre id='rust-example-rendered' class='rust '>
+<span class='kw'>use</span> <span class='ident'>atom_syndication</span>::{<span class='ident'>Feed</span>, <span class='ident'>Entry</span>};
+
+<span class='kw'>let</span> <span class='ident'>entry</span> <span class='op'>=</span> <span class='ident'>Entry</span> {
+    <span class='ident'>id</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;urn:uuid:4ae8550b-2987-49fa-9f8c-54c180c418ac&quot;</span>),
+    <span class='ident'>title</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;Ford hires Elon Musk as CEO&quot;</span>),
+    <span class='ident'>updated</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;2019-04-01T07:30:00Z&quot;</span>),
+    ..<span class='ident'>Default</span>::<span class='ident'>default</span>()
+};
+
+<span class='kw'>let</span> <span class='ident'>feed</span> <span class='op'>=</span> <span class='ident'>Feed</span> {
+    <span class='ident'>id</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;urn:uuid:b3420f84-6bdf-4f46-a225-f1b9a14703b6&quot;</span>),
+    <span class='ident'>title</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;TechCrunch&quot;</span>),
+    <span class='ident'>updated</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;2019-04-01T07:30:00Z&quot;</span>),
+    <span class='ident'>entries</span>: <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>entry</span>],
+    ..<span class='ident'>Default</span>::<span class='ident'>default</span>()
+};
+
+<span class='kw'>let</span> <span class='ident'>atom_string</span> <span class='op'>=</span> <span class='ident'>feed</span>.<span class='ident'>to_string</span>();
+</pre>
+
+<h2 id="reading" class='section-header'><a
+                           href="#reading">Reading</a></h2><pre id='rust-example-rendered' class='rust '>
+<span class='kw'>use</span> <span class='ident'>atom_syndication</span>::<span class='ident'>Feed</span>;
+
+<span class='kw'>let</span> <span class='ident'>atom_str</span> <span class='op'>=</span> <span class='string'>r#&quot;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;feed xmlns=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+  &lt;id&gt;urn:uuid:b3420f84-6bdf-4f46-a225-f1b9a14703b6&lt;/id&gt;
+  &lt;title&gt;TechCrunch&lt;/title&gt;
+  &lt;updated&gt;2019-04-01T07:30:00Z&lt;/updated&gt;
+  &lt;entry&gt;
+    &lt;id&gt;urn:uuid:4ae8550b-2987-49fa-9f8c-54c180c418ac&lt;/id&gt;
+    &lt;title&gt;Ford hires Elon Musk as CEO&lt;/title&gt;
+    &lt;updated&gt;2019-04-01T07:30:00Z&lt;/updated&gt;
+  &lt;/entry&gt;
+&lt;/feed&gt;
+&quot;#</span>;
+
+<span class='kw'>let</span> <span class='ident'>feed</span> <span class='op'>=</span> <span class='ident'>atom_str</span>.<span class='ident'>parse</span>::<span class='op'>&lt;</span><span class='ident'>Feed</span><span class='op'>&gt;</span>().<span class='ident'>unwrap</span>();
+</pre>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Author.html'
+                               title='atom_syndication::Author'>Author</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.2.1">The Atom Syndication Format § The &quot;atom:author&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Category.html'
+                               title='atom_syndication::Category'>Category</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.2.2">The Atom Syndication Format § The &quot;atom:category&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Contributor.html'
+                               title='atom_syndication::Contributor'>Contributor</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.2.3">The Atom Syndication Format § The &quot;atom:contributor&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Entry.html'
+                               title='atom_syndication::Entry'>Entry</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.1.2">The Atom Syndication Format § The &quot;atom:entry&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Feed.html'
+                               title='atom_syndication::Feed'>Feed</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.1.1">The Atom Syndication Format § The &quot;atom:feed&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Generator.html'
+                               title='atom_syndication::Generator'>Generator</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.2.4">The Atom Syndication Format § The &quot;atom:generator&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Link.html'
+                               title='atom_syndication::Link'>Link</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.2.7">The Atom Syndication Format § The &quot;atom:link&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Person.html'
+                               title='atom_syndication::Person'>Person</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-3.2">The Atom Syndication Format § Person Constructs</a></p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Source.html'
+                               title='atom_syndication::Source'>Source</a></td>
+                        <td class='docblock short'>
+                             <p><a href="https://tools.ietf.org/html/rfc4287#section-4.2.11">The Atom Syndication Format § The &quot;atom:source&quot; Element</a></p>
+
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "atom_syndication";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Feed` struct in crate `atom_syndication`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Feed">
+
+    <title>atom_syndication::Feed - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>atom_syndication</a></p><script>window.sidebarCurrent = {name: 'Feed', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>atom_syndication</a>::<wbr><a class='struct' href=''>Feed</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
+        </span><a id='src-23' class='srclink' href='../src/atom_syndication/feed.rs.html#24-38' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Feed {
+    pub id: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    pub title: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    pub updated: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    pub icon: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+    pub logo: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+    pub rights: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+    pub subtitle: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+    pub generator: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../atom_syndication/struct.Generator.html' title='atom_syndication::Generator'>Generator</a>&gt;,
+    pub links: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../atom_syndication/struct.Link.html' title='atom_syndication::Link'>Link</a>&gt;,
+    pub categories: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../atom_syndication/struct.Category.html' title='atom_syndication::Category'>Category</a>&gt;,
+    pub authors: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../atom_syndication/struct.Person.html' title='atom_syndication::Person'>Person</a>&gt;,
+    pub contributors: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../atom_syndication/struct.Person.html' title='atom_syndication::Person'>Person</a>&gt;,
+    pub entries: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../atom_syndication/struct.Entry.html' title='atom_syndication::Entry'>Entry</a>&gt;,
+}</pre><div class='docblock'><p><a href="https://tools.ietf.org/html/rfc4287#section-4.1.1">The Atom Syndication Format § The &quot;atom:feed&quot; Element</a></p>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1><pre id='rust-example-rendered' class='rust '>
+<span class='kw'>use</span> <span class='ident'>atom_syndication</span>::<span class='ident'>Feed</span>;
+
+<span class='kw'>let</span> <span class='ident'>feed</span> <span class='op'>=</span> <span class='ident'>Feed</span> {
+    <span class='ident'>id</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;6011425f-414d-4a17-84ba-b731c2bb1fc2&quot;</span>),
+    <span class='ident'>title</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;My Blog&quot;</span>),
+    <span class='ident'>updated</span>: <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;2015-05-11T21:30:54Z&quot;</span>),
+    <span class='ident'>entries</span>: <span class='macro'>vec</span><span class='macro'>!</span>[],
+    ..<span class='ident'>Default</span>::<span class='ident'>default</span>()
+};
+</pre>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.id'><code>id</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.title'><code>title</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.updated'><code>updated</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.icon'><code>icon</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.logo'><code>logo</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.rights'><code>rights</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.subtitle'><code>subtitle</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.generator'><code>generator</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.links'><code>links</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.categories'><code>categories</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.authors'><code>authors</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.contributors'><code>contributors</code></td><td></td></tr><tr class='stab '>
+                                  <td id='structfield.entries'><code>entries</code></td><td></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/str/trait.FromStr.html' title='core::str::FromStr'>FromStr</a> for <a class='struct' href='../atom_syndication/struct.Feed.html' title='atom_syndication::Feed'>Feed</a></code></h3><div class='impl-items'><h4 id='assoc_type.Err' class='type'><code>type Err = &amp;'static <a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+<h4 id='method.from_str' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/str/trait.FromStr.html#method.from_str' class='fnname'>from_str</a>(s: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;Self, Self::Err&gt;</code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/collections/string/trait.ToString.html' title='collections::string::ToString'>ToString</a> for <a class='struct' href='../atom_syndication/struct.Feed.html' title='atom_syndication::Feed'>Feed</a></code></h3><div class='impl-items'><h4 id='method.to_string' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/collections/string/trait.ToString.html#method.to_string' class='fnname'>to_string</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../atom_syndication/struct.Feed.html' title='atom_syndication::Feed'>Feed</a></code></h3><div class='impl-items'><h4 id='method.default' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/default/trait.Default.html#method.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../atom_syndication/struct.Feed.html' title='atom_syndication::Feed'>Feed</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "atom_syndication";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

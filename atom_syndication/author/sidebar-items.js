@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Author","The Atom Syndication Format § The \"atom:author\" Element"]]});
