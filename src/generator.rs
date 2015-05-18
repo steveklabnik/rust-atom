@@ -2,7 +2,7 @@ use std::convert::AsRef;
 
 use xml::Element;
 
-use ::{NS, ElementUtils, ViaXml};
+use ::{ElementUtils, NS, ViaXml};
 
 
 /// [The Atom Syndication Format § The "atom:generator" Element]

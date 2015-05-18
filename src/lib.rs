@@ -61,29 +61,29 @@
 //! let feed = atom_str.parse::<Feed>().unwrap();
 //! ```
 
-mod feed;
-mod entry;
-mod link;
-mod source;
-mod category;
-mod generator;
-mod person;
 mod author;
+mod category;
 mod contributor;
+mod entry;
+mod feed;
+mod generator;
+mod link;
+mod person;
+mod source;
 
 extern crate xml;
 
 use xml::Element;
 
-pub use ::feed::Feed;
-pub use ::entry::Entry;
-pub use ::link::Link;
-pub use ::source::Source;
-pub use ::category::Category;
-pub use ::generator::Generator;
-pub use ::person::Person;
 pub use ::author::Author;
+pub use ::category::Category;
 pub use ::contributor::Contributor;
+pub use ::entry::Entry;
+pub use ::feed::Feed;
+pub use ::generator::Generator;
+pub use ::link::Link;
+pub use ::person::Person;
+pub use ::source::Source;
 
 
 const NS: &'static str = "http://www.w3.org/2005/Atom";

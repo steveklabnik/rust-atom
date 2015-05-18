@@ -1,6 +1,6 @@
 use xml::Element;
 
-use ::{NS, ElementUtils, Person, ViaXml};
+use ::{ElementUtils, NS, Person, ViaXml};
 
 
 /// [The Atom Syndication Format § The "atom:contributor" Element]
