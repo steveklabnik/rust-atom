@@ -7,7 +7,7 @@ license = "Apache-2.0"
 repository = "https://github.com/vtduncan/rust-atom"
 documentation = "https://vtduncan.github.io/rust-atom/atom_syndication/index.html"
 description = "Library for serializing the Atom web content syndication format"
-keywords = ["rss", "atom", "feed", "blog", "web", "news"]
+keywords = ["rss", "atom", "feed", "blog"]
 exclude = ["test-data/*"]
 
 
