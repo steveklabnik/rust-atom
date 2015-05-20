@@ -52,3 +52,9 @@ let atom_str = r#"
 
 let feed = atom_str.parse::<Feed>().unwrap();
 ```
+
+## Acknowledgements
+
+Thanks to [Corey Farwell](https://rwell.org/) for writing
+[rust-rss](https://github.com/frewsxcv/rust-rss). This library is a
+fairly direct port of it to Atom.
