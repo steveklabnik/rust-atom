@@ -1,7 +1,8 @@
 language: rust
 rust:
   - nightly
-  - 1.0.0-beta.4
+  - stable
+  - 1.0.0
 after_success: |
   cargo doc && \
   echo '<meta http-equiv=refresh content=0;url=atom_syndication/index.html>' > target/doc/index.html && \
