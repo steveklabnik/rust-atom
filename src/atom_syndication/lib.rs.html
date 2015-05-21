@@ -361,29 +361,29 @@
 <span class='doccomment'>//! let feed = atom_str.parse::&lt;Feed&gt;().unwrap();</span>
 <span class='doccomment'>//! ```</span>
 
-<span class='kw'>mod</span> <span class='ident'>feed</span>;
-<span class='kw'>mod</span> <span class='ident'>entry</span>;
-<span class='kw'>mod</span> <span class='ident'>link</span>;
-<span class='kw'>mod</span> <span class='ident'>source</span>;
-<span class='kw'>mod</span> <span class='ident'>category</span>;
-<span class='kw'>mod</span> <span class='ident'>generator</span>;
-<span class='kw'>mod</span> <span class='ident'>person</span>;
 <span class='kw'>mod</span> <span class='ident'>author</span>;
+<span class='kw'>mod</span> <span class='ident'>category</span>;
 <span class='kw'>mod</span> <span class='ident'>contributor</span>;
+<span class='kw'>mod</span> <span class='ident'>entry</span>;
+<span class='kw'>mod</span> <span class='ident'>feed</span>;
+<span class='kw'>mod</span> <span class='ident'>generator</span>;
+<span class='kw'>mod</span> <span class='ident'>link</span>;
+<span class='kw'>mod</span> <span class='ident'>person</span>;
+<span class='kw'>mod</span> <span class='ident'>source</span>;
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>xml</span>;
 
 <span class='kw'>use</span> <span class='ident'>xml</span>::<span class='ident'>Element</span>;
 
-<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>feed</span>::<span class='ident'>Feed</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>entry</span>::<span class='ident'>Entry</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>link</span>::<span class='ident'>Link</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>source</span>::<span class='ident'>Source</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>category</span>::<span class='ident'>Category</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>generator</span>::<span class='ident'>Generator</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>person</span>::<span class='ident'>Person</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>author</span>::<span class='ident'>Author</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>category</span>::<span class='ident'>Category</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>contributor</span>::<span class='ident'>Contributor</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>entry</span>::<span class='ident'>Entry</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>feed</span>::<span class='ident'>Feed</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>generator</span>::<span class='ident'>Generator</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>link</span>::<span class='ident'>Link</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>person</span>::<span class='ident'>Person</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> ::<span class='ident'>source</span>::<span class='ident'>Source</span>;
 
 
 <span class='kw'>const</span> <span class='ident'>NS</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span> <span class='op'>=</span> <span class='string'>&quot;http://www.w3.org/2005/Atom&quot;</span>;
@@ -588,6 +588,10 @@
                 <code>struct</code>, <code>enum</code>,
                 <code>trait</code>, <code>typedef</code> (or
                 <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
             </p>
         </div>
     </div>
