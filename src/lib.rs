@@ -127,7 +127,7 @@ fn elem_with_text(tag_name: &'static str, chars: &str) -> Element {
 }
 
 
-trait ViaXml {
+trait ViaXml where Self: Sized {
     fn to_xml(&self) -> Element;
     fn from_xml(elem: Element) -> Result<Self, &'static str>;
 }
